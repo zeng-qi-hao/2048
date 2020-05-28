@@ -2,33 +2,9 @@ var board = new Array();
 var score = 0;
 var hasConflicted = new Array();//避免一次性加完,使效果更美观
 
-var stratx=0;
-var straty=0;
-var endx=0;
-var endy=0;
-
 $(function(){
-	prepareForMobile();
 	newgame();
 })
-
-function prepareForMobile(){
-	
-	if(documentWidth > 500){//当屏幕宽度大于500时;用此参数;
-		gridContainerWidth = 500;
-		cellSpace = 20;
-		cellSideLength = 100;
-	}
-	
-	$('#grid-container').css('width',gridContainerWidth-2*cellSpace);
-	$('#grid-container').css('height',gridContainerWidth-2*cellSpace);
-	$('#grid-container').css('padding',cellSpace);
-	$('#grid-container').css('border-radius',0.02*gridContainerWidth);
-	
-	$('.grid-cell').css('width',cellSideLength);
-	$('.grid-cell').css('height',cellSideLength);
-	$('.grid-cell').css('border-radius',0.02*cellSideLength);
-}
 
 function newgame(){
 	//初始化棋盘
@@ -71,11 +47,11 @@ function updateBoardView(){
 			if(board[i][j]==0){
 				theNumberCell.css('width','0px');
 				theNumberCell.css('height','0px');
-				theNumberCell.css('top',getPosTop(i,j)+ cellSideLength/2)
-				theNumberCell.css('left',getPosLeft(i,j)+ cellSideLength/2)
+				theNumberCell.css('top',getPosTop(i,j)+50)
+				theNumberCell.css('left',getPosLeft(i,j)+50)
 			}else{
-				theNumberCell.css('width',cellSideLength);
-				theNumberCell.css('height',cellSideLength);
+				theNumberCell.css('width','100px');
+				theNumberCell.css('height','100px');
 				theNumberCell.css('top',getPosTop(i,j))
 				theNumberCell.css('left',getPosLeft(i,j))
 				theNumberCell.css('background-color',getNumberBackgoundColor(board[i][j]));
@@ -85,9 +61,6 @@ function updateBoardView(){
 			
 			hasConflicted[i][j]=false;
 		}
-		
-	$('.number-cell').css('line-height',cellSideLength+'px');
-	$('.number-cell').css('font-size',0.6*cellSideLength+'px');
 }
 
 function generateOneNumber(){
@@ -165,65 +138,6 @@ $(document).keydown(function(event){
 			break;
 	}
 });
-//模拟手机的触摸滑动
-document.addEventListener('touchstart',function(event){
-	stratx=event.touches[0].pageX;
-	straty=event.touches[0].pageY;
-});
-
-document.addEventListener('touchmove',function(event){
-	event.preventDefault();
-});
-
-//上下左右的滑动触发的逻辑与事件
-document.addEventListener('touchend',function(event){
-	endx=event.changedTouches[0].pageX;
-	endy=event.changedTouches[0].pageY;
-	
-	var deltax=endx-stratx;
-	var deltay=endy-straty;
-	
-	if(Math.abs(deltax)<0.3*documentWidth && Math.abs(deltay)<0.3*documentWidth){		//防止点击使也进行滑动操作
-		return;
-	}
-	
-	//x
-	if(Math.abs(deltax)>=Math.abs(deltay)){			//abs()代表的是取绝对值
-		if(deltax>0){
-			//move right
-			if(moveRight()){
-				setTimeout('generateOneNumber()',210);
-				setTimeout('isgameover()',300);
-			}
-		}
-		else{
-			//move left 
-			if(moveLeft()){
-				setTimeout('generateOneNumber()',210);
-				setTimeout('isgameover()',300);
-			}
-		}
-	}
-	//y
-	else{
-		
-		if(deltay>0){
-			//move down
-			if(moveDown()){
-				setTimeout('generateOneNumber()',210);
-				setTimeout('isgameover()',300);
-			}
-		}
-		else{
-			//move up 
-			if(moveUp()){
-				setTimeout('generateOneNumber()',210);
-				setTimeout('isgameover()',300);
-			}
-		}
-	}
-});
-
 
 function isgameover(){
 	if(nospace(board) && nomove(board)){
