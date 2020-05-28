@@ -171,9 +171,9 @@ document.addEventListener('touchstart',function(event){
 	straty=event.touches[0].pageY;
 });
 
-// document.addEventListener('touchmove',function(event){
-// 	event.preventDefault();
-// });
+document.addEventListener('touchmove',function(event){
+	event.preventDefault();
+});
 
 //上下左右的滑动触发的逻辑与事件
 document.addEventListener('touchend',function(event){
